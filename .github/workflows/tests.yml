@@ -30,12 +30,6 @@ jobs:
       run: |
         pytest -v
     
-    - name: Run linting
-      run: |
-        flake8 calculator.py test_calculator.py --max-line-length=88
-        black --check calculator.py test_calculator.py
-      continue-on-error: true
-    
     - name: Generate coverage report
       run: |
         pytest --cov=calculator --cov-report=term --cov-report=xml
