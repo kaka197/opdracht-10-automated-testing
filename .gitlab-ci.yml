@@ -1,0 +1,45 @@
+stages:
+  - test
+  - lint
+  - coverage
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - python --version
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  script:
+    - pytest -v
+  only:
+    - main
+    - merge_requests
+
+lint:
+  stage: lint
+  script:
+    - flake8 calculator.py test_calculator.py
+    - black --check calculator.py test_calculator.py
+  allow_failure: true
+  only:
+    - main
+    - merge_requests
+
+coverage:
+  stage: coverage
+  script:
+    - pytest --cov=calculator --cov-report=term --cov-report=html
+  artifacts:
+    paths:
+      - htmlcov/
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests

@@ -1,0 +1,24 @@
+language: python
+
+python:
+  - "3.8"
+  - "3.9"
+  - "3.10"
+  - "3.11"
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - pytest -v
+  - flake8 calculator.py test_calculator.py --max-line-length=88
+  - black --check calculator.py test_calculator.py
+  - pytest --cov=calculator --cov-report=term
+
+after_success:
+  - echo "All tests passed successfully!"
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
